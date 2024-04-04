@@ -2,7 +2,7 @@ const express = require("express");
 require("./db/index.js");
 const authRouter = require("./routes/auth.js");
 const cors = require("cors");
-const User = require("./models/user.js");
+const UserModel = require("./models/user.js");
 
 const app = express();
 
@@ -26,13 +26,13 @@ app.post("/addaddress",async(req,res)=>{
   try {
     const {userId,address} = req.body;
     // find user by the userId
-    const user = await User.findById(userId);
+    const user = await UserModel.findById(userId);
     if(!user){
       res.status(404).json({message:"User Not Found"})
     }
     // add new address to users address array
-    User.address.push(address);
-    User.bulkSave();
+    user.address.push(address);
+    user.save();
   } catch (error) {
     res.status(500).json({message:"Error Adding Address"})
   }
