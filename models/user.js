@@ -23,6 +23,24 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    address:[{
+      name:String,
+      mobileNo:String,
+      houseNo:String,
+      street:String,
+      landmark:String,
+      city:String,
+      country:String,
+      postalcode:String
+    }],
+    orders:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"order"
+    }],
+    createdAt:{
+      type:Date,
+      default:Date.now
+    }
   },
   {
     timestamps: true,
