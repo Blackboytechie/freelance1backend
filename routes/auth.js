@@ -26,7 +26,7 @@ const isAuth = async (req, res, next) => {
     if (!user) return res.status(403).json({ error: "unauthorized access!" });
 
     req.user = user;
-
+    console.log("user:",user);
     next();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {

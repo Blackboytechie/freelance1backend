@@ -37,3 +37,18 @@ app.post("/addaddress",async(req,res)=>{
     res.status(500).json({message:"Error Adding Address"})
   }
 })
+
+//Endpoint to get all addresses of the user
+app.get("/addresses/:userId",()=>{
+  try {
+    const userId = req.params.userId;
+    const user = UserModel.findById(userId);
+    if(!user){
+      res.status(404).json({message:"User Not Found"})
+    }
+    const addresses = user.address;
+    res.status(200).json({message:"ok",addresses:addresses})
+  } catch (error) {
+    res.status(500).json({message:"Error getting User Addresses"})
+  }
+})
