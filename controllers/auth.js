@@ -45,6 +45,7 @@ exports.adminResponse = async function(req, res) {
 exports.sendProfile = function(req, res) {
   res.json({
     profile: {
+      id:req.user._id,
       name: req.user.name,
       email: req.user.email,
       role: req.user.role,
