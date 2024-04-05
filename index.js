@@ -49,7 +49,7 @@ app.get("/addresses/:userId",(req,res)=>{
       res.status(404).json({message:"User Not Found"})
     }
     const addresses = user.address;
-    res.status(200).json({message:"ok",addresses:addresses})
+    res.status(200).json({message:"ok",addresses})
   } catch (error) {
     res.status(500).json({message:"Error getting User Addresses"})
   }
