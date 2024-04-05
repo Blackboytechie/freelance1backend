@@ -41,7 +41,7 @@ app.post("/addaddress",async(req,res)=>{
 })
 
 //Endpoint to get all addresses of the user
-app.get("/addresses/:userId",()=>{
+app.get("/addresses/:userId",(req,res)=>{
   try {
     const userId = req.params.userId;
     const user = UserModel.findById(userId);
