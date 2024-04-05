@@ -41,10 +41,10 @@ app.post("/addaddress",async(req,res)=>{
 })
 
 //Endpoint to get all addresses of the user
-app.get("/addresses/:userId",(req,res)=>{
+app.get("/addresses/:userId",async(req,res)=>{
   try {
     const userId = req.params.userId;
-    const user = UserModel.findById(userId);
+    const user = await UserModel.findById(userId);
     if(!user){
       res.status(404).json({message:"User Not Found"})
     }
