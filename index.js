@@ -60,8 +60,14 @@ app.get("/addresses/:userId",async(req,res)=>{
 app.post("/placeorder",async(req,res)=>{
   try {
     const {userId,cartItems,totalPrice,shippingAddress,paymentMethod}=req.body;
+    console.log("userId: " + userId);
+    console.log("cartItems: " + cartItems);
+    console.log("totalPrice: " + totalPrice);
+    console.log("shippingAddress: " + shippingAddress);
+    console.log("paymentMethod: " + paymentMethod);
     const user = await UserModel.findById(userId);
     if(!user){
+      console.log("user not found");
       return res.status(404).json({message:"user not found"});
     }
     // create array of products from cart items
@@ -71,6 +77,7 @@ app.post("/placeorder",async(req,res)=>{
       price:item?.newPrice,
       image:item?.image
     }))
+    console.log("product: " + product);
 
     // create new order
     const order = new Order({
@@ -80,7 +87,7 @@ app.post("/placeorder",async(req,res)=>{
       shippingAddress:shippingAddress,
       paymentMethod:paymentMethod
     })
-
+    console.log("placed order: " + order);
     await order.save();
     res.status(200).json({message:"Order Created Successfully!!!"})
   } catch (error) {
