@@ -3,6 +3,7 @@ require("./db/index.js");
 const authRouter = require("./routes/auth.js");
 const cors = require("cors");
 const UserModel = require("./models/user.js");
+const Order = require("./models/order.js");
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.post("/addaddress",async(req,res)=>{
     // find user by the userId
     const user = await UserModel.findById(userId);
     if(!user){
-      res.status(404).json({message:"User Not Found"})
+      return res.status(404).json({message:"User Not Found"})
     }
     // add new address to users address array
     user.address.push(address);
@@ -46,11 +47,57 @@ app.get("/addresses/:userId",async(req,res)=>{
     const userId = req.params.userId;
     const user = await UserModel.findById(userId);
     if(!user){
-      res.status(404).json({message:"User Not Found"})
+      return res.status(404).json({message:"User Not Found"})
     }
     const addresses = user.address;
     res.status(200).json({message:"ok",addresses})
   } catch (error) {
     res.status(500).json({message:"Error getting User Addresses"})
+  }
+})
+
+//Endpoint To Store All The Orders
+app.post("/placeorder",async(req,res)=>{
+  try {
+    const {userId,cartItems,totalPrice,shippingAddress,paymentMethod}=req.body;
+    const user = await UserModel.findById(userId);
+    if(!user){
+      return res.status(404).json({message:"user not found"});
+    }
+    // create array of products from cart items
+    const products = cartItems.map((item)=>({
+      name:item?.name,
+      quantity:item?.quantity,
+      price:item?.newPrice,
+      image:item?.image
+    }))
+
+    // create new order
+    const order = new Order({
+      user:userId,
+      products:products,
+      totalPrice:totalPrice,
+      shippingAddress:shippingAddress,
+      paymentMethod:paymentMethod
+    })
+
+    await order.save();
+    res.status(200).json({message:"Order Created Successfully!!!"})
+  } catch (error) {
+    res.status(500).json({message:"Error creating order"})
+  }
+})
+
+//get users orders
+app.get("/orders/:userId",async(req,res) => {
+  try {
+    const userId = req.params.userId;
+    const orders = await Order.find({user:userId}).populate("user");
+    if(!orders||orders.length === 0) {
+      return res.status(404).json({message:"No Orders Found For This User"})
+    }
+    res.status(200).json({message:"your Order",order:orders})
+  } catch (error) {
+    res.status(500).json({message: "Error getting users orders"});
   }
 })
