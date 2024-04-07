@@ -66,7 +66,7 @@ app.post("/placeorder",async(req,res)=>{
     }
     // create array of products from cart items
     const products = cartItems.map((item)=>({
-      name:item?.name,
+      name:item?.title,
       quantity:item?.quantity,
       price:item?.newPrice,
       image:item?.image
