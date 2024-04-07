@@ -77,7 +77,7 @@ app.post("/placeorder",async(req,res)=>{
       price:item?.newPrice,
       image:item?.image
     }))
-    console.log("product: " + product);
+    console.log("product: " + products);
 
     // create new order
     const order = new Order({
