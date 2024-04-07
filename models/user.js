@@ -32,7 +32,7 @@ const userSchema = new Schema(
       landmark:String,
       city:String,
       country:String,
-      postalcode:String
+      postalCode:String
     }],
     orders:[{
       type:mongoose.Schema.Types.ObjectId,
