@@ -117,15 +117,17 @@ app.get("/orders/:userId", async (req, res) => {
 //stripe paymentsheet
 app.post("/payment-sheet", async (req, res) => {
   // Get product amount and currency from the request body
-  const { amount, currency, userId } = req.body;
-  console.log("amount: " + amount + " currency: " + currency + " userId: " + userId);
+  const { amount, currency, userId, selectedAddress } = req.body;
+  console.log(
+    "amount: " + amount + " currency: " + currency + " userId: " + userId
+  );
   // check customerId
   const user = await UserModel.findById(userId);
   if (!user) {
     console.log("user not found");
     return res.status(404).json({ message: "user not found" });
   }
-  if(user.customerId){
+  if (user.customerId) {
     console.log("customerId is set to " + user.customerId);
     const ephemeralKey = await stripe.ephemeralKeys.create(
       { customer: user.customerId },
@@ -135,7 +137,20 @@ app.post("/payment-sheet", async (req, res) => {
       amount,
       currency,
       customer: user.customerId,
-      setup_future_usage: 'off_session',
+      setup_future_usage: "off_session",
+      description: "ecommerce pay",
+      // description: 'Software development services',
+      shipping: {
+        name: selectedAddress?.name,
+        address: {
+          line1: `${selectedAddress?.houseNo},${selectedAddress?.street}`,
+          postal_code: selectedAddress?.postalCode,
+          city: selectedAddress?.city,
+          state: selectedAddress?.state,
+          country: selectedAddress?.country,
+        },
+      },
+      payment_method_types: ["card"],
     });
     // Return the paymentIntent to the client
     return res.json({
@@ -146,9 +161,18 @@ app.post("/payment-sheet", async (req, res) => {
         "pk_test_51P3HfZSIOfadBdWaO7w2Fs0Zo49SwMd929OMWKFnTLtngJkZ9MZQ0kFgBrAG3r5pPWD0aOTLxLCWr5aQxyvYrz2E00WajNJ0gp",
     });
   }
-console.log("customerId not found");
+  console.log("customerId not found");
   // Use an existing Customer ID if this is a returning customer.
-  const customer = await stripe.customers.create();
+  const customer = await stripe.customers.create({
+    name: selectedAddress?.name,
+    address: {
+      line1: `${selectedAddress?.houseNo},${selectedAddress?.street}`,
+      postal_code: selectedAddress?.postalCode,
+      city: selectedAddress?.city,
+      state: selectedAddress?.state,
+      country: selectedAddress?.country,
+    },
+  });
   // save customerId to database
   user.customerId = customer.id;
   await user.save();
@@ -159,12 +183,23 @@ console.log("customerId not found");
   const paymentIntent = await stripe.paymentIntents.create({
     amount,
     currency,
-    customer: customer.id,
-    // In the latest version of the API, specifying the `automatic_payment_methods` parameter
-    // is optional because Stripe enables its functionality by default.
-    automatic_payment_methods: {
-      enabled: false,
+    customer: user.customerId,
+    setup_future_usage: "off_session",
+    description: "ecommerce pay",
+    // description: 'Software development services',
+    shipping: {
+      name: selectedAddress?.name,
+      address: {
+        line1: `${selectedAddress?.houseNo},${selectedAddress?.street}`,
+        postal_code: selectedAddress?.postalCode,
+        city: selectedAddress?.city,
+        state: selectedAddress?.state,
+        country: selectedAddress?.country,
+      },
     },
+    amount: 1099,
+    currency: "usd",
+    payment_method_types: ["card"],
   });
 
   res.json({
