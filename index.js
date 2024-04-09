@@ -135,9 +135,7 @@ app.post("/payment-sheet", async (req, res) => {
       amount,
       currency,
       customer: user.customerId,
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      setup_future_usage: 'off_session',
     });
     // Return the paymentIntent to the client
     return res.json({
