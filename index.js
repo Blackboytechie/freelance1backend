@@ -140,7 +140,7 @@ app.post("/payment-sheet", async (req, res) => {
       },
     });
     // Return the paymentIntent to the client
-    res.json({
+    return res.json({
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: user.customerId,
