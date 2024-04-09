@@ -118,7 +118,6 @@ app.get("/orders/:userId", async (req, res) => {
 app.post("/payment-sheet", async (req, res) => {
   // Get product amount and currency from the request body
   const { amount, currency, userId } = req.body;
-  amount*=100;
   console.log("amount: " + amount + " currency: " + currency + " userId: " + userId);
   // check customerId
   const user = await UserModel.findById(userId);
