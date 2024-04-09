@@ -118,6 +118,7 @@ app.get("/orders/:userId", async (req, res) => {
 app.post("/payment-sheet", async (req, res) => {
   // Get product amount and currency from the request body
   const { amount, currency, userId } = req.body;
+  console.log("amount: " + amount + " currency: " + currency + " userId: " + userId);
   // check customerId
   const user = await UserModel.findById(userId);
   if (!user) {
@@ -125,16 +126,15 @@ app.post("/payment-sheet", async (req, res) => {
     return res.status(404).json({ message: "user not found" });
   }
   if(user.customerId){
+    console.log("customerId is set to " + user.customerId);
     const ephemeralKey = await stripe.ephemeralKeys.create(
-      { customer: customerId },
+      { customer: user.customerId },
       { apiVersion: "2023-10-16" }
     );
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency,
-      customer: customerId,
-      // In the latest version of the API, specifying the `automatic_payment_methods` parameter
-      // is optional because Stripe enables its functionality by default.
+      customer: user.customerId,
       automatic_payment_methods: {
         enabled: true,
       },
@@ -148,7 +148,7 @@ app.post("/payment-sheet", async (req, res) => {
         "pk_test_51P3HfZSIOfadBdWaO7w2Fs0Zo49SwMd929OMWKFnTLtngJkZ9MZQ0kFgBrAG3r5pPWD0aOTLxLCWr5aQxyvYrz2E00WajNJ0gp",
     });
   }
-
+console.log("customerId not found");
   // Use an existing Customer ID if this is a returning customer.
   const customer = await stripe.customers.create();
   // save customerId to database
