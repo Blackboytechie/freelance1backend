@@ -1,8 +1,11 @@
+const { Router } = require("express");
+const stripeRouter = Router();
+
 const stripe = require('stripe')('pk_test_51P3HfZSIOfadBdWaO7w2Fs0Zo49SwMd929OMWKFnTLtngJkZ9MZQ0kFgBrAG3r5pPWD0aOTLxLCWr5aQxyvYrz2E00WajNJ0gp');
 // This example sets up an endpoint using the Express framework.
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
 
-app.post('/payment-sheet', async (req, res) => {
+stripeRouter.post('/payment-sheet', async (req, res) => {
   // Use an existing Customer ID if this is a returning customer.
   const customer = await stripe.customers.create();
   const ephemeralKey = await stripe.ephemeralKeys.create(
