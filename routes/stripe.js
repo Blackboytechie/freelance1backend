@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const stripeRouter = Router();
+const { express } = require("express");
+const stripeRouter = express.Router();
 
 const stripe = require('stripe')('pk_test_51P3HfZSIOfadBdWaO7w2Fs0Zo49SwMd929OMWKFnTLtngJkZ9MZQ0kFgBrAG3r5pPWD0aOTLxLCWr5aQxyvYrz2E00WajNJ0gp');
 // This example sets up an endpoint using the Express framework.
