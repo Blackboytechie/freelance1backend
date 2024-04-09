@@ -1,6 +1,7 @@
 const express = require("express");
 require("./db/index.js");
 const authRouter = require("./routes/auth.js");
+const stripeRouter = require("./routes/stripe.js");
 const cors = require("cors");
 const UserModel = require("./models/user.js");
 const Order = require("./models/order.js");
@@ -11,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/auth", authRouter);
+app.use("/stripe", stripeRouter);
 
 app.get("/", (req, res) => {
   res.json({ shop:"mahinelectrical" });
