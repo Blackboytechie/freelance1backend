@@ -151,12 +151,6 @@ app.post("/payment-sheet", async (req, res) => {
         },
       },
       payment_method_types: ["card"],
-      payment_method_options: {
-        card: {
-          // Set 3D Secure to "optional" or "automatic" to avoid requiring 3D Secure authentication
-          three_d_secure: "optional",
-        },
-      },
     });
     // Return the paymentIntent to the client
     return res.json({
@@ -203,15 +197,8 @@ app.post("/payment-sheet", async (req, res) => {
         country: selectedAddress?.country,
       },
     },
-    amount: 1099,
-    currency: "usd",
     payment_method_types: ["card"],
-    payment_method_options: {
-      card: {
-        // Set 3D Secure to "optional" or "automatic" to avoid requiring 3D Secure authentication
-        three_d_secure: "optional",
-      },
-    },
+    
   });
 
   res.json({
