@@ -38,6 +38,10 @@ const userSchema = new Schema(
       type:mongoose.Schema.Types.ObjectId,
       ref:"order"
     }],
+    customerId: {
+      type: String,
+      unique: true,
+    },
     createdAt:{
       type:Date,
       default:Date.now
