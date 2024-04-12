@@ -49,6 +49,8 @@ exports.sendProfile = function(req, res) {
       name: req.user.name,
       email: req.user.email,
       role: req.user.role,
+      address:req.user.address,
+      orders:req.user.orders
     },
   });
 };
