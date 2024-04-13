@@ -36,7 +36,7 @@ const userSchema = new Schema(
     }],
     orders:[{
       type:mongoose.Schema.Types.ObjectId,
-      ref:"order"
+      ref:"Order"
     }],
     customerId: {
       type: String,
