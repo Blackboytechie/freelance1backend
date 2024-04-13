@@ -96,7 +96,10 @@ app.post("/placeorder", async (req, res) => {
     console.log("placed order: " + order);
     await order.save();
     console.log("orderId:",order._id);
+    user.orders.push(order._id)
+    await user.save();
     res.status(200).json({ message: "Order Created Successfully!!!" });
+    res.status(200).json({ message: "orderid added to user info" });
   } catch (error) {
     res.status(500).json({ message: "Error creating order" });
   }
