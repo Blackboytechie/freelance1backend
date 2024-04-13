@@ -95,6 +95,7 @@ app.post("/placeorder", async (req, res) => {
     });
     console.log("placed order: " + order);
     await order.save();
+    console.log("orderId:",order._id);
     res.status(200).json({ message: "Order Created Successfully!!!" });
   } catch (error) {
     res.status(500).json({ message: "Error creating order" });
